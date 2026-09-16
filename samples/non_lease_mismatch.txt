@@ -1,0 +1,21 @@
+CURRICULUM VITAE - ALEX RIVERA
+Software Engineer & Full-Stack Developer
+Email: alex.rivera@email.com | Phone: (555) 019-2834 | GitHub: github.com/alexrivera
+
+PROFESSIONAL SUMMARY
+Results-driven software engineer with 5+ years of experience designing, architecting, and deploying distributed backend microservices and responsive web applications using TypeScript, Node.js, Python, and React.
+
+TECHNICAL SKILLS
+- Languages: TypeScript, JavaScript, Python, Go, SQL
+- Frameworks: Express, Fastify, React, Next.js, Django
+- Cloud & DevOps: AWS (EC2, S3, Lambda), Docker, Kubernetes, CI/CD pipelines
+- Databases: PostgreSQL, MongoDB, Redis
+
+WORK EXPERIENCE
+Senior Backend Engineer | TechVanguard Solutions (2022 - Present)
+- Architected and deployed scalable event-driven microservices serving 1.5M daily active users.
+- Reduced database query latency by 42% through query indexing and Redis caching layer.
+- Mentored junior engineers and led code review best practices across 3 product squads.
+
+EDUCATION
+Bachelor of Science in Computer Science, University of California, Berkeley (2016 - 2020)

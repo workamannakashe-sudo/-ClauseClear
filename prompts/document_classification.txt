@@ -1,0 +1,13 @@
+Task: Classify whether the submitted document is a Residential Lease Agreement, Lease Addendum/Renewal, or an unrelated document mismatch (e.g. resume, medical bill, software license, employment contract, sales invoice).
+
+Input Text:
+{{DOCUMENT_TEXT}}
+
+Respond STRICTLY in valid JSON matching this schema:
+{
+  "isResidentialLease": boolean,
+  "detectedDocumentType": string,
+  "confidenceScore": number, // 0.0 to 1.0
+  "mismatchReason": string | null, // Explains clearly why this is not a residential lease if isResidentialLease is false
+  "guidanceMessage": string // Helpful guidance for the user
+}

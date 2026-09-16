@@ -1,0 +1,37 @@
+Task: Generate an actionable, prioritized next-steps checklist and communication guide for a tenant based on the risks and obligations discovered in their lease.
+
+Discovered Findings & Risks:
+{{ANALYSIS_FINDINGS}}
+
+Generate:
+1. "immediate_actions": Items needing resolution BEFORE signing or within 48 hours of move-in.
+2. "questions_for_landlord": Clarification questions to ask the landlord in writing.
+3. "documentation_to_request": Records, receipts, condition checklists, or utility disclosures to demand.
+4. "attorney_consultation_triggers": Specific red-flag clauses that warrant legal aid or attorney review.
+5. "draft_letter_template": A ready-to-send drafted email/letter to the landlord negotiating or clarifying the top flagged issues.
+
+Respond STRICTLY with valid JSON following this format:
+{
+  "summary": "High-level action plan overview",
+  "checklist": [
+    {
+      "id": string,
+      "category": "immediate" | "negotiate" | "document" | "legal_review",
+      "urgency": "CRITICAL" | "HIGH" | "MEDIUM" | "LOW",
+      "title": string,
+      "actionDetails": string,
+      "relatedClause": string | null
+    }
+  ],
+  "questionsForLandlord": [
+    {
+      "question": string,
+      "context": string
+    }
+  ],
+  "draftNegotiationLetter": {
+    "subject": string,
+    "recipient": "Landlord / Property Manager",
+    "body": string
+  }
+}

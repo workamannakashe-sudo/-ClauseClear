@@ -1,0 +1,46 @@
+Task: Deeply analyze the following residential lease agreement for a tenant. Extract substantive terms, categorize them, simplify them into plain English without losing legal meaning, identify risks, and highlight unusual or potentially predatory clauses.
+
+Document Text:
+{{DOCUMENT_TEXT}}
+
+Extract clauses and group them into:
+1. "tenant_obligations": Duties, restrictions, fees, rules imposed on the tenant.
+2. "landlord_obligations": Repairs, utilities, entry notice, quiet enjoyment promised by landlord.
+3. "risk_flags": Clauses that pose financial, legal, privacy, or eviction risk for the tenant.
+4. "unusual_clauses": Terms that deviate from standard residential leases (e.g., tenant pays landlord's structural repairs, 0-hour notice of entry, immediate forfeiture of deposit, waiver of jury trial).
+
+Risk Severity Levels:
+- "CRITICAL": Potentially illegal, severe financial jeopardy, or loss of fundamental tenant rights.
+- "HIGH": Significant financial penalties, harsh restrictions, or one-sided liability waivers.
+- "MEDIUM": Moderate inconvenience, tight timelines, or above-average fees.
+- "STANDARD": Normal, customary lease provisions.
+
+Respond STRICTLY with valid JSON following this format:
+{
+  "summary": {
+    "headline": "High-level plain-English verdict of this lease",
+    "keyDetails": {
+      "rentAmount": string | null,
+      "securityDeposit": string | null,
+      "leaseTerm": string | null,
+      "lateFee": string | null,
+      "noticePeriodDays": number | null
+    },
+    "overallRiskScore": number, // 0 to 100
+    "riskLevel": "LOW" | "MODERATE" | "HIGH" | "CRITICAL",
+    "criticalNotice": string | null
+  },
+  "clauses": [
+    {
+      "id": string,
+      "title": string,
+      "category": "tenant_obligation" | "landlord_obligation" | "risk_flag" | "unusual_clause",
+      "originalSnippet": string, // Direct quote from lease
+      "plainEnglish": string, // Clear explanation for everyday renter
+      "whyItMatters": string, // Real-world implications
+      "riskLevel": "CRITICAL" | "HIGH" | "MEDIUM" | "STANDARD",
+      "isUnusual": boolean,
+      "recommendation": string
+    }
+  ]
+}

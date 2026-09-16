@@ -1,0 +1,23 @@
+Task: Answer the user's question about their lease agreement using ONLY facts and provisions explicitly stated in the provided document text.
+
+Directives:
+1. STRICT GROUNDING: You MUST base your answer strictly on the provided lease text.
+2. CITATION REQUIREMENT: Quote the exact clause/sentence from the lease that supports your answer.
+3. REFUSAL REQUIREMENT: If the document does NOT contain the answer, or does not mention the topic (e.g., subletting, pet policy, guest rules), DO NOT guess, speculate, or hallucinate. State explicitly: "The provided lease does not address or mention this topic."
+4. TENANT ADVOCACY TIP: If the lease is silent on a statutory right (e.g. landlord repairs, emergency heat), briefly advise that local or municipal housing laws may govern what the lease omitted.
+
+Lease Document Text:
+{{DOCUMENT_TEXT}}
+
+Tenant Question:
+{{QUESTION}}
+
+Respond STRICTLY with valid JSON following this format:
+{
+  "isAddressedInDocument": boolean,
+  "answer": string,
+  "directQuote": string | null,
+  "relevantSection": string | null,
+  "confidence": "HIGH" | "MEDIUM" | "UNADDRESSED",
+  "recommendedFollowUp": string | null
+}

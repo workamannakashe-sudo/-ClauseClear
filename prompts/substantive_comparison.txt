@@ -1,0 +1,36 @@
+Task: Compare two versions of a residential lease agreement (Version A: Original Lease, Version B: Renewal / Amended Lease).
+Produce a substantive diff focusing on legal rights, obligations, monetary changes, and newly introduced risks, NOT a superficial line-by-line word diff.
+
+Version A (Original / Prior):
+{{VERSION_A}}
+
+Version B (Amended / Proposed):
+{{VERSION_B}}
+
+Respond STRICTLY with valid JSON following this format:
+{
+  "summary": {
+    "headline": "High-level overview of substantive changes between versions",
+    "favourabilityShift": "MORE_FAVORABLE_TO_TENANT" | "NEUTRAL" | "MORE_RESTRICTIVE_ON_TENANT" | "PREDATORY_ESCALATION",
+    "keyFinancialChanges": [
+      {
+        "metric": string, // e.g. Monthly Rent, Security Deposit, Pet Fee
+        "before": string,
+        "after": string,
+        "percentChange": string | null
+      }
+    ]
+  },
+  "differences": [
+    {
+      "clauseTitle": string,
+      "changeType": "MODIFIED" | "ADDED" | "REMOVED",
+      "impactOnTenant": "NEGATIVE" | "NEUTRAL" | "POSITIVE",
+      "severity": "CRITICAL" | "HIGH" | "MEDIUM" | "LOW",
+      "versionA_Snippet": string | null,
+      "versionB_Snippet": string | null,
+      "plainLanguageAnalysis": string,
+      "actionRecommendation": string
+    }
+  ]
+}

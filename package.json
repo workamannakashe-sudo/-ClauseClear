@@ -1,0 +1,58 @@
+{
+  "name": "leaseguard-ai",
+  "version": "1.0.0",
+  "description": "LeaseGuard AI: Context-aware Legal GenAI Assistant for Tenants and Renters",
+  "main": "backend/dist/server.js",
+  "scripts": {
+    "dev:backend": "tsx watch backend/src/server.ts",
+    "dev:frontend": "vite --config frontend/vite.config.ts frontend",
+    "dev": "concurrently -k -n \"BACKEND,FRONTEND\" -c \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build:frontend": "vite build --config frontend/vite.config.ts frontend",
+    "build:backend": "tsc -p backend/tsconfig.json",
+    "build": "npm run build:frontend && npm run build:backend",
+    "start": "node backend/dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx}\""
+  },
+  "keywords": [
+    "legal-ai",
+    "tenant-rights",
+    "lease-analysis",
+    "genai",
+    "hackathon"
+  ],
+  "author": "LeaseGuard Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "lucide-react": "^0.475.0",
+    "mammoth": "^1.9.0",
+    "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.4",
+    "@types/pdf-parse": "^1.1.4",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/supertest": "^6.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.20.1",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5"
+  }
+}
