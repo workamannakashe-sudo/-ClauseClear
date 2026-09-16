@@ -1,0 +1,1 @@
+# AI-for-Legal-Assistance-Access-promptwar
