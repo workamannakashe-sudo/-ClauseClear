@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, ShieldAlert, Scale, ExternalLink } from 'lucide-react';
+import { AlertTriangle, Scale, ExternalLink, ShieldAlert } from 'lucide-react';
 import { RiskLevel } from '../types.js';
 
 interface LegalBannerProps {
@@ -16,35 +16,32 @@ export const LegalBanner: React.FC<LegalBannerProps> = ({ currentRiskLevel, onOp
       aria-label="Legal Disclaimer and Risk Advisory"
       style={{
         background: isHighRisk
-          ? 'linear-gradient(90deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15))'
-          : 'rgba(30, 41, 59, 0.45)',
-        borderBottom: `1px solid ${isHighRisk ? 'rgba(239, 68, 68, 0.3)' : 'var(--border-color)'}`,
-        padding: '0.65rem 0',
-        transition: 'all 0.3s ease'
+          ? 'linear-gradient(90deg, rgba(239,68,68,0.08), rgba(249,115,22,0.08))'
+          : 'rgba(139,92,246,0.04)',
+        borderBottom: `1px solid ${isHighRisk ? 'rgba(239,68,68,0.2)' : 'rgba(139,92,246,0.1)'}`,
+        padding: '0.55rem 0',
+        transition: 'all 0.3s ease',
       }}
     >
       <div className="container" style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '0.75rem',
-        fontSize: '0.82rem'
+        display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', flexWrap: 'wrap',
+        gap: '0.75rem', fontSize: '0.8rem',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flex: 1 }}>
           {isHighRisk ? (
-            <ShieldAlert size={18} color="#ef4444" style={{ flexShrink: 0 }} />
+            <ShieldAlert size={16} color="var(--risk-critical-text)" style={{ flexShrink: 0 }} aria-hidden="true" />
           ) : (
-            <Scale size={18} color="#94a3b8" style={{ flexShrink: 0 }} />
+            <Scale size={16} color="var(--accent-violet)" style={{ flexShrink: 0 }} aria-hidden="true" />
           )}
-          <p style={{ color: isHighRisk ? '#fca5a5' : 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>
+          <p style={{ color: isHighRisk ? 'var(--risk-critical-text)' : 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>
             {isHighRisk ? (
               <strong>
-                CRITICAL TENANT ADVISORY: High-risk or potentially unenforceable terms detected in this agreement. LeaseGuard AI provides legal education, NOT formal legal representation. Consultation with a tenant attorney or local legal aid clinic is strongly recommended.
+                CRITICAL ADVISORY: High-risk terms detected. ClauseClear provides legal education only — not formal legal representation. Consult a tenant attorney or legal aid clinic.
               </strong>
             ) : (
               <span>
-                <strong>INFORMATIONAL LEGAL INTELLIGENCE:</strong> LeaseGuard AI assists tenants with clause simplification and risk awareness. It does not constitute binding legal counsel or an attorney-client relationship.
+                <strong>Informational only.</strong> ClauseClear assists with clause simplification and risk awareness. Not legal advice or attorney-client relationship.
               </span>
             )}
           </p>
@@ -53,21 +50,19 @@ export const LegalBanner: React.FC<LegalBannerProps> = ({ currentRiskLevel, onOp
         <button
           onClick={onOpenLegalModal}
           style={{
-            background: 'transparent',
-            border: 'none',
-            color: isHighRisk ? '#f87171' : 'var(--accent-blue)',
-            fontWeight: 600,
-            fontSize: '0.8rem',
+            background: 'none', border: 'none',
+            color: isHighRisk ? 'var(--risk-critical-text)' : 'var(--accent-violet)',
+            fontWeight: 600, fontSize: '0.78rem',
             cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.3rem',
-            padding: '0.2rem 0.4rem',
-            borderRadius: '4px'
+            display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+            padding: '0.2rem 0.5rem',
+            borderRadius: 'var(--radius-sm)',
+            minHeight: 32,
           }}
+          aria-label="Find Tenant Legal Aid — opens legal disclaimer"
         >
-          <span>Find Tenant Legal Aid</span>
-          <ExternalLink size={13} />
+          Find Tenant Legal Aid
+          <ExternalLink size={12} aria-hidden="true" />
         </button>
       </div>
     </div>

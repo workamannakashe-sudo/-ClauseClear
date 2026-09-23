@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Scale, AlertTriangle, ExternalLink, ShieldCheck } from 'lucide-react';
+import { X, Scale, AlertTriangle, ShieldCheck } from 'lucide-react';
 
 interface LegalModalProps {
   isOpen: boolean;
@@ -15,123 +15,155 @@ export const LegalModal: React.FC<LegalModalProps> = ({ isOpen, onClose }) => {
       aria-modal="true"
       aria-labelledby="legal-modal-title"
       style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(6px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 100,
-        padding: '1.5rem'
+        position: 'fixed', inset: 0,
+        backgroundColor: 'rgba(30,27,75,0.45)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        zIndex: 1000, padding: '1.5rem',
       }}
       onClick={onClose}
     >
       <div
-        className="glass-panel"
         style={{
-          width: '100%',
-          maxWidth: '640px',
-          maxHeight: '90vh',
-          overflowY: 'auto',
+          width: '100%', maxWidth: 640, maxHeight: '90vh', overflowY: 'auto',
           padding: '2rem',
-          background: '#0f172a',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          position: 'relative'
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          border: '1px solid rgba(139,92,246,0.15)',
+          borderRadius: 'var(--radius-xl)',
+          boxShadow: '0 24px 64px rgba(139,92,246,0.15), 0 8px 24px rgba(0,0,0,0.08)',
+          position: 'relative',
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Close button */}
         <button
           onClick={onClose}
           style={{
-            position: 'absolute',
-            top: '1.25rem',
-            right: '1.25rem',
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--text-muted)',
-            cursor: 'pointer',
-            padding: '0.25rem'
+            position: 'absolute', top: '1.25rem', right: '1.25rem',
+            background: 'rgba(139,92,246,0.07)',
+            border: '1px solid rgba(139,92,246,0.15)',
+            borderRadius: '50%',
+            width: 36, height: 36,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: 'var(--text-muted)', cursor: 'pointer',
+            transition: 'all 0.2s',
           }}
           aria-label="Close legal modal"
         >
-          <X size={20} />
+          <X size={18} />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-          <div style={{
-            padding: '0.5rem',
-            borderRadius: '8px',
-            background: 'rgba(59, 130, 246, 0.15)',
-            color: 'var(--accent-blue)'
-          }}>
-            <Scale size={24} />
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.5rem' }}>
+          <div
+            style={{
+              width: 44, height: 44, borderRadius: '50%',
+              background: 'conic-gradient(from 210deg, #f9a8d4, #c4b5fd, #93c5fd, #f9a8d4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 12px rgba(167,139,250,0.3)',
+              flexShrink: 0,
+            }}
+            aria-hidden="true"
+          >
+            <Scale size={22} color="#fff" />
           </div>
           <div>
-            <h2 id="legal-modal-title" style={{ fontSize: '1.35rem', margin: 0 }}>
+            <h2 id="legal-modal-title" style={{ fontSize: '1.3rem', margin: 0, fontWeight: 800 }}>
               Legal Disclaimer & Tenant Resources
             </h2>
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-              Important information regarding your rights and representation
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+              Important information about ClauseClear's scope
             </p>
           </div>
         </div>
 
-        <div style={{
-          background: 'rgba(239, 68, 68, 0.1)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
-          borderRadius: 'var(--radius-md)',
-          padding: '1rem',
-          marginBottom: '1.5rem'
-        }}>
-          <div style={{ display: 'flex', gap: '0.65rem' }}>
-            <AlertTriangle size={20} color="#ef4444" style={{ flexShrink: 0, marginTop: '2px' }} />
+        {/* Warning box */}
+        <div
+          style={{
+            background: 'rgba(239,68,68,0.07)',
+            border: '1px solid rgba(239,68,68,0.2)',
+            borderRadius: 'var(--radius-md)',
+            padding: '1rem 1.1rem',
+            marginBottom: '1.5rem',
+          }}
+        >
+          <div style={{ display: 'flex', gap: '0.65rem', alignItems: 'flex-start' }}>
+            <AlertTriangle size={18} color="#dc2626" style={{ flexShrink: 0, marginTop: 2 }} aria-hidden="true" />
             <div>
-              <h4 style={{ color: '#fca5a5', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                Not Legal Advice / No Attorney-Client Relationship
+              <h4 style={{ color: '#dc2626', fontSize: '0.9rem', marginBottom: '0.3rem', fontWeight: 700 }}>
+                Not Legal Advice · No Attorney-Client Relationship
               </h4>
-              <p style={{ fontSize: '0.8rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
-                LeaseGuard AI is an automated generative AI legal education system designed to illuminate standard residential tenancy provisions. It does not provide legal representation, legal advice, or attorney oversight. Tenancy regulations vary significantly across municipal jurisdictions, state statutes, and rent stabilization ordinances.
+              <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.55, margin: 0 }}>
+                ClauseClear is an automated AI legal-literacy tool designed to help first-time tenants understand their residential rental agreements. It does <strong>not</strong> provide legal representation, legal advice, or attorney oversight. Tenancy regulations vary across jurisdictions and individual circumstances. Always consult a licensed advocate for binding guidance.
               </p>
             </div>
           </div>
         </div>
 
-        <h3 style={{ fontSize: '1.05rem', marginBottom: '0.75rem' }}>
-          Free & Low-Cost Tenant Legal Resources
+        {/* Resources */}
+        <h3 style={{ fontSize: '1rem', marginBottom: '0.85rem', fontWeight: 700 }}>
+          🇮🇳 Free Tenant Legal Resources in India
         </h3>
-        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
-          <li style={{ background: 'var(--bg-elevated)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>Legal Services Corporation (LSC)</strong>
-              <span className="badge badge-standard">Free Legal Aid</span>
-            </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-              Federal non-profit providing civil legal assistance to low-income Americans facing eviction or housing disputes.
-            </p>
-          </li>
-          <li style={{ background: 'var(--bg-elevated)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>HUD Tenant Rights by State</strong>
-              <span className="badge badge-standard">Government</span>
-            </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-              Directory of state-specific laws governing security deposits, repairs, notice of entry, and tenant remedies.
-            </p>
-          </li>
-          <li style={{ background: 'var(--bg-elevated)', padding: '0.85rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>National Low Income Housing Coalition (NLIHC)</strong>
-              <span className="badge badge-standard">Advocacy</span>
-            </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-              Renter protection databases and local tenant union directory.
-            </p>
-          </li>
+        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.75rem' }}>
+          {[
+            {
+              name: 'District Legal Services Authority (DLSA)',
+              tag: 'Free Legal Aid',
+              desc: 'Every district in India has a DLSA providing free legal aid for tenancy disputes under the Legal Services Authorities Act.',
+            },
+            {
+              name: 'National Legal Services Authority (NALSA)',
+              tag: 'Government',
+              desc: 'NALSA provides legal awareness programs and free aid for economically weaker tenants across India.',
+            },
+            {
+              name: 'Rent Control Courts / Tribunals',
+              tag: 'Statutory',
+              desc: 'Disputes over rent, deposit refunds, and evictions are adjudicated under your state\'s Rent Control Act (e.g., Maharashtra Rent Control Act 1999).',
+            },
+          ].map((r) => (
+            <li
+              key={r.name}
+              style={{
+                background: 'rgba(255,255,255,0.8)',
+                padding: '0.9rem 1rem',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-color)',
+                boxShadow: 'var(--shadow-sm)',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                <strong style={{ fontSize: '0.88rem', color: 'var(--text-primary)' }}>{r.name}</strong>
+                <span className="badge badge-standard">{r.tag}</span>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.3rem', lineHeight: 1.5 }}>
+                {r.desc}
+              </p>
+            </li>
+          ))}
         </ul>
 
+        {/* Grounding note */}
+        <div
+          style={{
+            display: 'flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.75rem 1rem',
+            background: 'rgba(16,185,129,0.06)',
+            border: '1px solid rgba(16,185,129,0.2)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '0.8rem', color: '#059669',
+            marginBottom: '1.5rem',
+          }}
+        >
+          <ShieldCheck size={16} aria-hidden="true" />
+          All ClauseClear answers are verbatim-grounded in your uploaded document. Zero persistent storage — your data is never saved.
+        </div>
+
         <div style={{ textAlign: 'right' }}>
-          <button onClick={onClose} className="btn btn-primary">
+          <button onClick={onClose} className="btn btn-primary" style={{ minWidth: 180 }}>
             I Understand & Acknowledge
           </button>
         </div>

@@ -35,7 +35,9 @@ export class LLMService {
   }
 
   public getIsMockMode(): boolean {
-    return this.isMockMode;
+    const key = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY || this.geminiApiKey || this.openaiApiKey;
+    const forceMock = process.env.MOCK_MODE === 'true' || process.env.MOCK_MODE === '1';
+    return forceMock || !key;
   }
 
   /**
@@ -166,16 +168,19 @@ export class LLMService {
    * Dispatches LLM call to Google Gemini (or OpenAI if configured)
    */
   private async callLLM(systemPrompt: string, userPrompt: string): Promise<string> {
-    if (this.geminiApiKey) {
-      return this.callGemini(systemPrompt, userPrompt);
-    } else if (this.openaiApiKey) {
+    const geminiKey = process.env.GEMINI_API_KEY || this.geminiApiKey;
+    const openaiKey = process.env.OPENAI_API_KEY || this.openaiApiKey;
+    if (geminiKey) {
+      return this.callGemini(systemPrompt, userPrompt, geminiKey);
+    } else if (openaiKey) {
       return this.callOpenAI(systemPrompt, userPrompt);
     }
     throw new Error('No valid LLM API key configured');
   }
 
-  private async callGemini(systemPrompt: string, userPrompt: string): Promise<string> {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.geminiApiKey}`;
+  private async callGemini(systemPrompt: string, userPrompt: string, apiKey = process.env.GEMINI_API_KEY || this.geminiApiKey): Promise<string> {
+    const model = 'gemini-3.6-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -198,11 +203,15 @@ export class LLMService {
 
     if (!res.ok) {
       const errText = await res.text();
-      throw new Error(`Gemini API error (${res.status}): ${errText}`);
+      let errMsg = `Gemini API error (${res.status})`;
+      try { errMsg += `: ${(JSON.parse(errText)).error?.message ?? errText}`; } catch { errMsg += `: ${errText.slice(0, 300)}`; }
+      throw new Error(errMsg);
     }
 
     const data: any = await res.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Gemini returned empty response — check quota or prompt length');
+    return text;
   }
 
   private async callOpenAI(systemPrompt: string, userPrompt: string): Promise<string> {

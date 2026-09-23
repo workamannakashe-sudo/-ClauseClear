@@ -4,7 +4,8 @@ export type ClauseCategory =
   | 'tenant_obligation'
   | 'landlord_obligation'
   | 'risk_flag'
-  | 'unusual_clause';
+  | 'unusual_clause'
+  | 'missing_clause';
 
 export interface Clause {
   id: string;
@@ -16,6 +17,8 @@ export interface Clause {
   riskLevel: RiskLevel;
   isUnusual: boolean;
   recommendation: string;
+  confidence?: 'HIGH' | 'MEDIUM' | 'LOW' | 'UNVERIFIED';
+  isVerified?: boolean;
 }
 
 export interface LeaseSummary {
@@ -31,6 +34,8 @@ export interface LeaseSummary {
   riskLevel: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
   criticalNotice: string | null;
   complexityLevel: 'SIMPLE' | 'MODERATE' | 'COMPLEX_DENSE';
+  depositMonths?: number;
+  lockInMonths?: number;
 }
 
 export interface LeaseAnalysisResult {
@@ -38,6 +43,9 @@ export interface LeaseAnalysisResult {
   clauses: Clause[];
   mismatch?: DocumentMismatchResult;
   isMockMode?: boolean;
+  groundingScore?: number;
+  missingClauses?: string[];
+  inconsistencies?: string[];
 }
 
 export interface DocumentMismatchResult {
@@ -106,6 +114,11 @@ export interface ActionChecklistResult {
     question: string;
     context: string;
   }>;
+  questionsForLawyer: Array<{
+    question: string;
+    context: string;
+  }>;
+  preSignVerification: string[];
   draftNegotiationLetter: {
     subject: string;
     recipient: string;
@@ -113,3 +126,4 @@ export interface ActionChecklistResult {
   };
   isMockMode?: boolean;
 }
+

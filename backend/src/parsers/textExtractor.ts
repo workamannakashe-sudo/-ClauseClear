@@ -16,6 +16,7 @@ export function sanitizeText(raw: string): string {
   if (!raw) return '';
   return raw
     .replace(/\0/g, '') // remove null bytes
+    .replace(/[\x01-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // strip ASCII control characters
     .replace(/\r\n/g, '\n') // normalize Windows CRLF to LF
     .replace(/\r/g, '\n')
     .replace(/[\u200B-\u200D\uFEFF]/g, '') // strip zero-width characters

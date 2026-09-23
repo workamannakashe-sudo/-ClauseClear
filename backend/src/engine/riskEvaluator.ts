@@ -1,16 +1,29 @@
 import { Clause, RiskLevel } from '../types/index.js';
 
+export interface RiskBreakdown {
+  criticalClauses: number;
+  highClauses: number;
+  depositMonths?: number;
+  lockInMonths?: number;
+  missingClausesCount?: number;
+  baseScore: number;
+}
+
 export interface EvaluatedRiskProfile {
   overallRiskScore: number; // 0 - 100
   overallRiskLevel: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
   criticalFlagsCount: number;
   highFlagsCount: number;
   unusualClausesCount: number;
+  breakdown: RiskBreakdown;
   escalatedProfessionalReviewRecommended: boolean;
   advisorySummary: string;
 }
 
-export function evaluateLeaseRisk(clauses: Clause[]): EvaluatedRiskProfile {
+export function evaluateLeaseRisk(
+  clauses: Clause[],
+  options?: { depositMonths?: number; lockInMonths?: number; missingClausesCount?: number }
+): EvaluatedRiskProfile {
   let criticalCount = 0;
   let highCount = 0;
   let mediumCount = 0;
@@ -35,8 +48,16 @@ export function evaluateLeaseRisk(clauses: Clause[]): EvaluatedRiskProfile {
   }
 
   // Calculate weighted risk score (0 to 100)
-  const baseScore = criticalCount * 30 + highCount * 15 + mediumCount * 5 + unusualCount * 5;
-  const overallRiskScore = Math.min(100, Math.max(10, baseScore));
+  // Transparent weights: Critical = 30, High = 15, Medium = 5, Unusual = 5
+  // Deposit excess (> 2 months under Model Tenancy Act) = 10
+  // Lock-in excess (> 6 months) = 10
+  const depositPenalty = (options?.depositMonths && options.depositMonths > 2) ? 10 : 0;
+  const lockInPenalty = (options?.lockInMonths && options.lockInMonths > 6) ? 10 : 0;
+  const missingPenalty = (options?.missingClausesCount && options.missingClausesCount > 2) ? 10 : 0;
+
+  const rawBase = criticalCount * 30 + highCount * 15 + mediumCount * 5 + unusualCount * 5;
+  const totalScore = rawBase + depositPenalty + lockInPenalty + missingPenalty;
+  const overallRiskScore = Math.min(100, Math.max(clauses.length > 0 ? 10 : 0, totalScore));
 
   let overallRiskLevel: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
   if (criticalCount > 0 || overallRiskScore >= 75) {
@@ -68,6 +89,14 @@ export function evaluateLeaseRisk(clauses: Clause[]): EvaluatedRiskProfile {
     criticalFlagsCount: criticalCount,
     highFlagsCount: highCount,
     unusualClausesCount: unusualCount,
+    breakdown: {
+      criticalClauses: criticalCount,
+      highClauses: highCount,
+      depositMonths: options?.depositMonths,
+      lockInMonths: options?.lockInMonths,
+      missingClausesCount: options?.missingClausesCount,
+      baseScore: overallRiskScore
+    },
     escalatedProfessionalReviewRecommended,
     advisorySummary
   };

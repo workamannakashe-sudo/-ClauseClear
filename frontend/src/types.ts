@@ -1,10 +1,13 @@
+/** Extended frontend types for ClauseClear v2 */
+
 export type RiskLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'STANDARD' | 'LOW';
 
 export type ClauseCategory =
   | 'tenant_obligation'
   | 'landlord_obligation'
   | 'risk_flag'
-  | 'unusual_clause';
+  | 'unusual_clause'
+  | 'missing_clause';
 
 export interface Clause {
   id: string;
@@ -16,6 +19,10 @@ export interface Clause {
   riskLevel: RiskLevel;
   isUnusual: boolean;
   recommendation: string;
+  /** Confidence from LLM (after grounding verifier pass) */
+  confidence?: 'HIGH' | 'MEDIUM' | 'LOW' | 'UNVERIFIED';
+  /** True if groundingVerifier confirmed quote is a substring of the source */
+  isVerified?: boolean;
 }
 
 export interface LeaseSummary {
@@ -31,6 +38,10 @@ export interface LeaseSummary {
   riskLevel: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
   criticalNotice: string | null;
   complexityLevel: 'SIMPLE' | 'MODERATE' | 'COMPLEX_DENSE';
+  /** Months of deposit (for transparent score breakdown) */
+  depositMonths?: number;
+  /** Months of lock-in period */
+  lockInMonths?: number;
 }
 
 export interface DocumentMismatchResult {
@@ -46,6 +57,12 @@ export interface LeaseAnalysisResult {
   clauses: Clause[];
   mismatch?: DocumentMismatchResult;
   isMockMode?: boolean;
+  /** % of clause quotes verified by grounding verifier (0-100) */
+  groundingScore?: number;
+  /** List of expected Indian rental clauses that are absent */
+  missingClauses?: string[];
+  /** Internal inconsistencies detected (e.g. two different notice periods) */
+  inconsistencies?: string[];
 }
 
 export interface ComparisonMetric {
@@ -106,6 +123,11 @@ export interface ActionChecklistResult {
     question: string;
     context: string;
   }>;
+  questionsForLawyer: Array<{
+    question: string;
+    context: string;
+  }>;
+  preSignVerification: string[];
   draftNegotiationLetter: {
     subject: string;
     recipient: string;

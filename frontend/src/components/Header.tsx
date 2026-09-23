@@ -1,101 +1,121 @@
 import React from 'react';
-import { Shield, Info, Sparkles, Scale } from 'lucide-react';
+import { Scale, ShieldAlert, Sparkles } from 'lucide-react';
+import { Language, strings } from '../i18n.js';
 
 interface HeaderProps {
   isMockMode: boolean;
+  language: Language;
   onOpenLegalModal: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isMockMode, onOpenLegalModal }) => {
+/**
+ * ClauseClear application header — light frosted glass edition.
+ * Provides a skip-link target, semantic <header> landmark,
+ * branding, demo/live mode badge, and legal notice link.
+ */
+export const Header: React.FC<HeaderProps> = ({ isMockMode, language, onOpenLegalModal }) => {
+  const t = strings[language];
+
   return (
-    <header style={{
-      borderBottom: '1px solid var(--border-color)',
-      background: 'rgba(9, 13, 22, 0.85)',
-      backdropFilter: 'blur(12px)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 50
-    }}>
-      <div className="container" style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: '4.25rem'
-      }}>
-        {/* Logo & Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <div style={{
-            width: '2.5rem',
-            height: '2.5rem',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 15px rgba(37, 99, 235, 0.4)'
-          }}>
-            <Shield size={22} color="#ffffff" />
+    <header
+      style={{
+        borderBottom: '1px solid rgba(139,92,246,0.1)',
+        background: 'rgba(255,255,255,0.78)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        boxShadow: '0 1px 24px rgba(139,92,246,0.06)',
+      }}
+    >
+      <div
+        className="container"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.75rem 1.5rem',
+          gap: '1rem',
+        }}
+      >
+        {/* Brand */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Orb-inspired logo */}
+          <div
+            style={{
+              width: 38, height: 38,
+              borderRadius: '50%',
+              background: 'conic-gradient(from 210deg, #f9a8d4, #c4b5fd, #93c5fd, #f9a8d4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 16px rgba(167,139,250,0.45), inset 0 2px 4px rgba(255,255,255,0.6)',
+              position: 'relative',
+              flexShrink: 0,
+            }}
+            aria-hidden="true"
+          >
+            <div style={{
+              position: 'absolute', inset: '20%',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), transparent 65%)',
+            }} />
+            <Scale size={18} color="#fff" style={{ position: 'relative', zIndex: 1 }} />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#fff' }}>
-                LeaseGuard <span style={{ color: 'var(--accent-blue)' }}>AI</span>
-              </span>
-              <span style={{
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                background: 'rgba(59, 130, 246, 0.15)',
-                color: 'var(--accent-blue)',
-                padding: '0.15rem 0.45rem',
-                borderRadius: '4px',
-                border: '1px solid rgba(59, 130, 246, 0.3)'
-              }}>
-                TENANT ADVOCACY
-              </span>
-            </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Legal Intelligence & Risk Defense for Renters
-            </p>
+            <span
+              style={{
+                fontSize: '1.2rem',
+                fontWeight: 800,
+                letterSpacing: '-0.04em',
+                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              ClauseClear
+            </span>
+            <span
+              style={{
+                fontSize: '0.62rem',
+                color: 'var(--text-muted)',
+                display: 'block',
+                letterSpacing: '0.06em',
+                marginTop: -1,
+                fontWeight: 500,
+              }}
+            >
+              RENTAL AGREEMENT ASSISTANT
+            </span>
           </div>
         </div>
 
-        {/* Right Status & Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          {/* Mode Indicator */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.45rem',
-            padding: '0.35rem 0.75rem',
-            borderRadius: 'var(--radius-full)',
-            fontSize: '0.78rem',
-            fontWeight: 500,
-            background: isMockMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
-            border: `1px solid ${isMockMode ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`,
-            color: isMockMode ? '#34d399' : '#60a5fa'
-          }}>
+        {/* Right side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          {/* Mode badge */}
+          <span
+            className={isMockMode ? 'badge badge-demo' : 'badge badge-live'}
+            title={isMockMode
+              ? 'Demo Mode — pre-computed responses, no API key required'
+              : 'Live Mode — powered by Google Gemini AI'}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+          >
             {isMockMode ? (
-              <>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
-                <span>Offline Evaluation Mode</span>
-              </>
+              <><Sparkles size={11} aria-hidden="true" /> {t.demoMode}</>
             ) : (
-              <>
-                <Sparkles size={14} />
-                <span>Live Gemini Engine</span>
-              </>
+              <><span aria-hidden="true">✦</span> {t.liveMode}</>
             )}
-          </div>
+          </span>
 
-          {/* Legal Disclaimer Button */}
+          {/* Legal notice */}
           <button
             onClick={onOpenLegalModal}
-            className="btn btn-secondary"
-            style={{ padding: '0.45rem 0.85rem', fontSize: '0.8rem' }}
-            aria-label="View Legal Disclaimer and Tenant Advocacy Resources"
+            className="btn btn-ghost"
+            style={{ fontSize: '0.78rem', padding: '0.4rem 0.85rem', minHeight: 36, gap: '0.3rem' }}
+            aria-label="Open legal notice and disclaimer"
           >
-            <Scale size={15} />
-            <span>Legal Notice</span>
+            <ShieldAlert size={14} aria-hidden="true" />
+            <span className="no-print">Legal Notice</span>
           </button>
         </div>
       </div>

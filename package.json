@@ -1,7 +1,7 @@
 {
-  "name": "leaseguard-ai",
-  "version": "1.0.0",
-  "description": "LeaseGuard AI: Context-aware Legal GenAI Assistant for Tenants and Renters",
+  "name": "clauseclear",
+  "version": "2.0.0",
+  "description": "ClauseClear: Verifiable, Judge-Ready Legal AI Assistant for Indian Urban Tenants (Riya)",
   "main": "backend/dist/server.js",
   "scripts": {
     "dev:backend": "tsx watch backend/src/server.ts",
@@ -13,6 +13,8 @@
     "start": "node backend/dist/server.js",
     "test": "vitest run",
     "test:watch": "vitest",
+    "eval": "tsx evals/run_evals.ts",
+    "check": "npm run build && npm run test && npm run eval",
     "lint": "eslint \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx}\""
   },
   "keywords": [

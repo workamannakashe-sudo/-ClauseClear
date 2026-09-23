@@ -1,0 +1,38 @@
+name: ClauseClear CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    name: Build, Test & Evals Benchmark
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: Run Build, Unit/Security Tests & Benchmark
+        run: npm run check
+
+      - name: Verify Repository Size (< 5MB)
+        run: |
+          REPO_SIZE=$(du -sk --exclude=.git . | awk '{print $1}')
+          echo "Repository size: ${REPO_SIZE} KB"
+          if [ "$REPO_SIZE" -gt 5120 ]; then
+            echo "ERROR: Repo size exceeds 5MB limit ($REPO_SIZE KB)"
+            exit 1
+          fi
+          echo "Repo size is within acceptable judge-friendly bounds."

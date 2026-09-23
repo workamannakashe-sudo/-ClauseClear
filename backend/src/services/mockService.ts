@@ -328,6 +328,40 @@ export class MockService {
     const qLower = question.toLowerCase();
     const docLower = text.toLowerCase();
 
+    // Check for Security Deposit
+    if (qLower.includes('deposit') || qLower.includes('security')) {
+      if (docLower.includes('deposit')) {
+        const quoteMatch = text.match(/(?:security\s+deposit|refundable\s+deposit)[^.\n]+(?:\.|\n|$)/i);
+        const quote = quoteMatch ? quoteMatch[0].trim() : 'The security deposit of ₹70,000 shall be refunded within seven (7) banking days.';
+        return {
+          isAddressedInDocument: true,
+          answer: `The document specifies the security deposit terms: "${quote}".`,
+          directQuote: quote,
+          relevantSection: 'Security Deposit Clause',
+          confidence: 'HIGH',
+          recommendedFollowUp: 'Verify that the return conditions and deduction terms match local regulations.',
+          isMockMode: true
+        };
+      }
+    }
+
+    // Check for Rent
+    if (qLower.includes('rent') || qLower.includes('license fee') || qLower.includes('monthly payment')) {
+      if (docLower.includes('rent') || docLower.includes('license fee')) {
+        const quoteMatch = text.match(/(?:rent|license fee)[^.\n]+(?:\.|\n|$)/i);
+        const quote = quoteMatch ? quoteMatch[0].trim() : 'The monthly license fee is ₹35,000.';
+        return {
+          isAddressedInDocument: true,
+          answer: `The document specifies the rental terms: "${quote}".`,
+          directQuote: quote,
+          relevantSection: 'Monthly Rent / License Fee',
+          confidence: 'HIGH',
+          recommendedFollowUp: 'Ensure payment method and due date are convenient for your banking cycle.',
+          isMockMode: true
+        };
+      }
+    }
+
     // Check for Pet Policy
     if (qLower.includes('pet') || qLower.includes('dog') || qLower.includes('cat')) {
       if (docLower.includes('pet')) {
@@ -521,6 +555,39 @@ export class MockService {
               context: 'Avoids surprise shared utility bills.'
             }
           ],
+      questionsForLawyer: isCritical
+        ? [
+            {
+              question: 'Is the clause waiving notice of entry enforceable under local municipal rent control / Model Tenancy Act rules?',
+              context: 'To confirm whether such forfeiture or entry clauses are void as contrary to public policy.'
+            },
+            {
+              question: 'Does the unilateral deposit forfeiture clause exceed the maximum allowable damages under Section 73/74 of the Indian Contract Act?',
+              context: 'Penalty clauses in standard contracts can be challenged as unconscionable.'
+            },
+            {
+              question: 'What is the required registration and stamp duty process for this leave and license agreement in Maharashtra/Karnataka/Delhi?',
+              context: 'Unregistered agreements beyond 11 months cannot be produced as evidence in court.'
+            }
+          ]
+        : [
+            {
+              question: 'Is this 11-month Leave & License agreement mandatory to be registered on the state e-registration portal?',
+              context: 'Ensures the agreement has legal validity if a dispute arises.'
+            },
+            {
+              question: 'What are the tenant rights regarding the return timeline of security deposit upon handover?',
+              context: 'Clarifies legal recourse if landlord withholds deposit beyond agreed timeline.'
+            }
+          ],
+      preSignVerification: [
+        'Verify original title deeds / electricity bill in landlord name matching the agreement',
+        'Verify that previous tenant electricity and water utility arrears are fully cleared',
+        'Inspect all electrical sockets, plumbing fixtures, and geysers during daytime walkthrough',
+        'Record high-resolution walkthrough video of all existing wall scuffs, tiles, and fittings',
+        'Ensure stamp duty and registration fees are clearly accounted for with an official receipt',
+        'Obtain signed inventory annexure listing all furniture and appliances provided'
+      ],
       draftNegotiationLetter: {
         subject: isCritical
           ? 'Proposed Revisions to Residential Lease Agreement — Unit 12B'
