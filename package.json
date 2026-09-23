@@ -15,7 +15,10 @@
     "test:watch": "vitest",
     "eval": "tsx evals/run_evals.ts",
     "check": "npm run build && npm run test && npm run eval",
-    "lint": "eslint \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx}\""
+    "lint": "eslint \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx}\"",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "legal-ai",
@@ -55,6 +58,7 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vite": "^6.1.0",
+    "vitepress": "^1.6.4",
     "vitest": "^3.0.5"
   }
 }

@@ -1,71 +1,39 @@
-# LeaseGuard AI — System Architecture & Decision Flow
+# System Architecture & Application Presets
 
-## Overview
-LeaseGuard AI is an intelligent legal assistant for residential tenants. It bridges the gap between dense legal language in tenancy agreements and actionable tenant self-defense through deterministic rule engines coupled with grounded LLM reasoning.
+This document details the software architecture, component separation, and deployment presets of **ClauseClear**.
 
-## Decision Architecture Flow
+## 🏗️ Technical Stack & Preset Architecture
 
-```
-+-------------------------------------------------------------+
-|                      User Ingestion                         |
-|   (Paste Text or Upload PDF / DOCX / TXT / 1-Click Samples) |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|               Parser & Security Sanitizer                   |
-|   (MIME verification, 5MB ceiling, script stripping)        |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|            Document Mismatch Detector (Engine)              |
-| - Checks for residential lease markers vs non-lease text   |
-| - If mismatch: triggers friendly guided alert without error |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|            Section Chunker & Complexity Analyzer            |
-| - Evaluates doc length & legal density                      |
-| - Adapts tone (simplified vs deep-dive)                     |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|              LLM / Offline Mock Engine                      |
-| - Grounded by modular versioned prompt templates in /prompts|
-| - Extracts structured JSON schema                           |
-+------------------------------+------------------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|            Deterministic Risk Escalation Engine             |
-| - Scores clauses: CRITICAL / HIGH / MEDIUM / STANDARD       |
-| - Flags habitability waivers, unannounced entry, forfeiture |
-| - Prioritizes actionable checklist items                    |
-+------------------------------+------------------------------+
-                               |
-        +----------------------+----------------------+
-        |                      |                      |
-        v                      v                      v
-+---------------+      +---------------+      +---------------+
-| Clause Review |      | Substantive   |      | Grounded Q&A  |
-| & Highlights  |      | Diff Engine   |      | & Citations   |
-+---------------+      +---------------+      +---------------+
-        |                      |                      |
-        +----------------------+----------------------+
-                               |
-                               v
-+-------------------------------------------------------------+
-|        Actionable Checklist & Letter Generator              |
-| - Pre-move inspection items                                 |
-| - Clarification questions for landlord                      |
-| - Ready-to-copy negotiation draft                           |
-+-------------------------------------------------------------+
-```
+| Component | Framework / Tool | Deployment / Host Preset |
+|---|---|---|
+| **Frontend Application** | React 18, Vite, TypeScript | Static Web Service (`/dist`) |
+| **Backend API Engine** | Node.js, Express, TypeScript | Node Web Service (`/api`, Port 5000) |
+| **AI Orchestration** | Google Gemini 3.6 Flash REST API | Cloud LLM Service |
+| **Documentation Site** | VitePress | VitePress Preset (`/docs`) |
 
-## Grounding & Refusal Guarantee
-To prevent hallucinations, the Q&A engine implements a strict 2-step verification:
-1. The question is searched against extracted lease sections and verified for thematic presence.
-2. If absent, the system explicitly returns `isAddressedInDocument: false` with guidance on state statutory baselines, refusing to invent fictitious lease terms.
+---
+
+## 🔌 API Endpoints (`/api`)
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/health` | `GET` | Health check & engine status (mock vs live mode indicator). |
+| `/api/samples` | `GET` | Retrieves pre-configured legal document samples for Riya. |
+| `/api/parse` | `POST` | Parses `.pdf`, `.docx`, or `.txt` files into sanitized text. |
+| `/api/analyze` | `POST` | Full analysis: risk score, clause breakdown, missing clauses, mismatch check. |
+| `/api/qa` | `POST` | Grounded Q&A against source document with quote verification. |
+| `/api/compare` | `POST` | Clause-by-clause comparison between Version A and Version B. |
+| `/api/checklist` | `POST` | Generates a tenant action checklist and negotiation advice. |
+
+---
+
+## 🚀 Application Deployment Presets
+
+### 1. Render (`render.yaml`)
+Preset configuration for hosting Node.js backend web service alongside Vite static frontend on Render.
+
+### 2. Vercel (`vercel.json`)
+Preset configuration for Vercel Serverless Functions (`backend/src/server.ts`) and Vite static build (`/dist`).
+
+### 3. Docker Compose (`docker-compose.yml`)
+Containerized environment exposing backend API on port 5000 and Vite dev frontend on port 5173.

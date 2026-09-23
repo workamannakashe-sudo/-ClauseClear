@@ -7,6 +7,8 @@ node_modules/
 dist/
 build/
 out/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
 *.tsbuildinfo
 
 # Environment variables and secrets
