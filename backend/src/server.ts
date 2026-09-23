@@ -4,6 +4,7 @@ dotenv.config();
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import apiRouter from './routes/api.js';
 
 const app = express();
@@ -108,7 +109,9 @@ app.use('/api', rateLimiter(RATE_LIMIT_DEFAULT));
 app.use('/api', apiRouter);
 
 /* ── Static frontend (production build) ────────────────────────────── */
-const frontendDist = path.resolve(process.cwd(), 'frontend', 'dist');
+const frontendDist = fs.existsSync(path.resolve(process.cwd(), 'dist', 'index.html'))
+  ? path.resolve(process.cwd(), 'dist')
+  : path.resolve(process.cwd(), 'frontend', 'dist');
 app.use(express.static(frontendDist, { dotfiles: 'deny' }));
 
 app.get('*', (_req: Request, res: Response) => {
