@@ -179,7 +179,7 @@ export class LLMService {
   }
 
   private async callGemini(systemPrompt: string, userPrompt: string, apiKey = process.env.GEMINI_API_KEY || this.geminiApiKey): Promise<string> {
-    const model = 'gemini-3.6-flash';
+    const model = 'gemini-2.0-flash';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     const res = await fetch(url, {
       method: 'POST',

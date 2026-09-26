@@ -74,7 +74,10 @@ export const App: React.FC = () => {
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(isMockMode && { 'x-mock-mode': 'true' }),
+        },
         body: JSON.stringify({ text: src }),
       });
 
@@ -94,7 +97,7 @@ export const App: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  }, [documentText]);
+  }, [documentText, isMockMode]);
 
   const handleDeleteData = useCallback(() => {
     setDocumentText('');
@@ -117,6 +120,7 @@ export const App: React.FC = () => {
         isMockMode={isMockMode}
         language={language}
         onOpenLegalModal={() => setIsLegalModalOpen(true)}
+        onToggleMockMode={() => setIsMockMode((prev) => !prev)}
       />
 
       <LegalBanner
@@ -240,9 +244,27 @@ export const App: React.FC = () => {
               padding: '1rem 1.25rem',
               color: 'var(--risk-critical-text)',
               fontSize: '0.88rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
             }}
           >
-            <strong>Analysis error:</strong> {analyzeError}
+            <div>
+              <strong>Analysis error:</strong> {analyzeError}
+            </div>
+            <button
+              onClick={() => {
+                setIsMockMode(true);
+                setAnalyzeError(null);
+                triggerAnalysis();
+              }}
+              className="btn btn-primary"
+              style={{ fontSize: '0.78rem', padding: '0.4rem 0.9rem', minHeight: 32 }}
+            >
+              🎭 Switch to Demo Mode & Retry
+            </button>
           </div>
         )}
 

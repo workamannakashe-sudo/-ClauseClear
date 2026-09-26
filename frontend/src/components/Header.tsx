@@ -6,6 +6,7 @@ interface HeaderProps {
   isMockMode: boolean;
   language: Language;
   onOpenLegalModal: () => void;
+  onToggleMockMode?: () => void;
 }
 
 /**
@@ -13,7 +14,7 @@ interface HeaderProps {
  * Provides a skip-link target, semantic <header> landmark,
  * branding, demo/live mode badge, and legal notice link.
  */
-export const Header: React.FC<HeaderProps> = ({ isMockMode, language, onOpenLegalModal }) => {
+export const Header: React.FC<HeaderProps> = ({ isMockMode, language, onOpenLegalModal, onToggleMockMode }) => {
   const t = strings[language];
 
   return (
@@ -92,20 +93,26 @@ export const Header: React.FC<HeaderProps> = ({ isMockMode, language, onOpenLega
 
         {/* Right side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-          {/* Mode badge */}
-          <span
+          {/* Mode badge toggle button */}
+          <button
+            type="button"
+            onClick={onToggleMockMode}
             className={isMockMode ? 'badge badge-demo' : 'badge badge-live'}
             title={isMockMode
-              ? 'Demo Mode — pre-computed responses, no API key required'
-              : 'Live Mode — powered by Google Gemini AI'}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+              ? 'Click to toggle — Currently in Demo Mode (pre-computed mock analysis)'
+              : 'Click to toggle — Currently in Live Mode (Gemini AI)'}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '0.3rem',
+              cursor: 'pointer', border: 'none', background: undefined,
+              outline: 'none', transition: 'transform 0.15s ease'
+            }}
           >
             {isMockMode ? (
-              <><Sparkles size={11} aria-hidden="true" /> {t.demoMode}</>
+              <><Sparkles size={11} aria-hidden="true" /> {t.demoMode} (Click to Switch)</>
             ) : (
-              <><span aria-hidden="true">✦</span> {t.liveMode}</>
+              <><span aria-hidden="true">✦</span> {t.liveMode} (Click to Switch)</>
             )}
-          </span>
+          </button>
 
           {/* Legal notice */}
           <button
