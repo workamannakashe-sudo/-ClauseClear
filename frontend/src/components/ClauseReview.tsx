@@ -7,17 +7,23 @@ import {
   Flame,
   UserCheck,
   Building,
-  HelpCircle
+  HelpCircle,
+  Columns,
+  LayoutGrid
 } from 'lucide-react';
 import { LeaseAnalysisResult, Clause, RiskLevel } from '../types.js';
+import { SplitView } from './SplitView.js';
 
 interface ClauseReviewProps {
   analysis: LeaseAnalysisResult;
+  documentText?: string;
 }
 
-export const ClauseReview: React.FC<ClauseReviewProps> = ({ analysis }) => {
+export const ClauseReview: React.FC<ClauseReviewProps> = ({ analysis, documentText = '' }) => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [viewMode, setViewMode] = useState<'split' | 'cards'>(documentText ? 'split' : 'cards');
+  const [activeQuote, setActiveQuote] = useState<string | null>(null);
 
   if (!analysis.summary) return null;
 
@@ -170,9 +176,31 @@ export const ClauseReview: React.FC<ClauseReviewProps> = ({ analysis }) => {
         </div>
       </div>
 
-      {/* Filter Tabs & Search Bar */}
+      {/* View Mode Switcher + Filter Tabs & Search Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          {/* View mode toggle */}
+          {documentText && (
+            <div style={{ display: 'flex', gap: '0.2rem', padding: '0.2rem', background: 'rgba(255,255,255,0.6)', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-color)', marginRight: '0.5rem' }}>
+              <button
+                onClick={() => setViewMode('split')}
+                className={`btn ${viewMode === 'split' ? 'btn-primary' : 'btn-ghost'}`}
+                style={{ fontSize: '0.78rem', padding: '0.35rem 0.8rem', minHeight: 32 }}
+                title="Source grounding split-view"
+              >
+                <Columns size={13} /> Split View
+              </button>
+              <button
+                onClick={() => setViewMode('cards')}
+                className={`btn ${viewMode === 'cards' ? 'btn-primary' : 'btn-ghost'}`}
+                style={{ fontSize: '0.78rem', padding: '0.35rem 0.8rem', minHeight: 32 }}
+                title="Full clause card view"
+              >
+                <LayoutGrid size={13} /> Card Grid
+              </button>
+            </div>
+          )}
+
           <button
             onClick={() => setActiveCategory('all')}
             className={`btn ${activeCategory === 'all' ? 'btn-primary' : 'btn-secondary'}`}
@@ -237,7 +265,16 @@ export const ClauseReview: React.FC<ClauseReviewProps> = ({ analysis }) => {
         />
       </div>
 
-      {/* Clause Cards Grid */}
+      {/* Render SplitView or Card Grid based on viewMode */}
+      {viewMode === 'split' && documentText ? (
+        <SplitView
+          documentText={documentText}
+          activeQuote={activeQuote}
+          clauses={filteredClauses}
+          onSelectClause={(c) => setActiveQuote(c.originalSnippet)}
+        />
+      ) : (
+      /* Clause Cards Grid */
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {filteredClauses.map((clause) => (
           <article
@@ -325,6 +362,7 @@ export const ClauseReview: React.FC<ClauseReviewProps> = ({ analysis }) => {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };

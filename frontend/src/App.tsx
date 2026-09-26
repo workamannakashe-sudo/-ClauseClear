@@ -277,7 +277,7 @@ export const App: React.FC = () => {
           )}
 
           {activeTab === 'clauses' && analysis && (
-            <ClauseReview analysis={analysis} />
+            <ClauseReview analysis={analysis} documentText={documentText} />
           )}
 
           {activeTab === 'compare' && (

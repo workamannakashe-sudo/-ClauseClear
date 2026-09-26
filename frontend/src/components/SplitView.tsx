@@ -36,19 +36,30 @@ export const SplitView: React.FC<SplitViewProps> = ({
     }
   }, [activeQuote]);
 
-  /** Build highlighted HTML. Only applied when activeQuote changes. */
+  /** Build highlighted HTML safely escaping special chars */
   const buildHighlightedHTML = useCallback(() => {
-    if (!activeQuote || !documentText) return documentText;
+    if (!documentText) return '';
+    const safeText = documentText
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    if (!activeQuote) return safeText;
 
     const needle = activeQuote.slice(0, 80);
-    const escapedNeedle = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const safeNeedle = needle
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
     try {
-      return documentText.replace(
-        new RegExp(`(${escapedNeedle})`, 'i'),
+      return safeText.replace(
+        new RegExp(`(${safeNeedle})`, 'i'),
         '<mark class="source-highlight" id="active-highlight" tabindex="-1">$1</mark>',
       );
     } catch {
-      return documentText;
+      return safeText;
     }
   }, [activeQuote, documentText]);
 
